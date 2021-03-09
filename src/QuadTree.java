@@ -1,14 +1,13 @@
 import java.util.Vector;
 
 public class QuadTree {
-    public QuadTree[] kids;
-    private Vector<Point> points;
     private final int capacity;
     private final Point origin;
     private final Dimension dimensions;
-
-    private boolean isDivided;
     private final Rectangle boundaries;
+    public QuadTree[] kids;
+    private final Vector<Point> points;
+    private boolean isDivided;
 
     public QuadTree(Point origin, Dimension dimensions) {
         kids = new QuadTree[4];

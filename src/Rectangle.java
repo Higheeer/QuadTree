@@ -2,9 +2,8 @@ public class Rectangle {
     public Point origin;
     public int width, height;
 
-    public Rectangle()
-    {
-        this.origin = new Point(0,0);
+    public Rectangle() {
+        this.origin = new Point(0, 0);
         this.width = 0;
         this.height = 0;
     }
