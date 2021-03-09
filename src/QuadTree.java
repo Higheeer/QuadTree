@@ -5,16 +5,12 @@ public class QuadTree {
     private final Point origin;
     private final Dimension dimensions;
     private final Rectangle boundaries;
-    public QuadTree[] kids;
     private final Vector<Point> points;
+    public QuadTree[] kids;
     private boolean isDivided;
 
     public QuadTree(Point origin, Dimension dimensions) {
         kids = new QuadTree[4];
-        kids[0] = null;
-        kids[1] = null;
-        kids[2] = null;
-        kids[3] = null;
 
         isDivided = false;
 
@@ -33,20 +29,22 @@ public class QuadTree {
 
     public void insert(Point point) {
         if (boundaries.contains(point)) {
-            if (!isDivided) {
-                if (points.size() < capacity) {
-                    points.add(point);
-                } else {
-                    divide();
-                    relocatePoints();
-                    insert(point);
-                }
-            } else {
-                for (QuadTree i : kids) {
-                    i.insert(point);
-                }
-            }
+
         }
+    }
+
+    private void insertToParent(Point point) {
+
+    }
+
+    private void insertToKid(Point point) {
+        for (QuadTree kid : kids) {
+            kid.insert(point);
+        }
+    }
+
+    private boolean exceededCapacity() {
+        return points.size() >= capacity;
     }
 
     private void divide() {
