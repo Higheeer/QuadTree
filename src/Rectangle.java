@@ -1,17 +1,16 @@
 public class Rectangle {
-    public Point origin;
-    public int width, height;
+    public Point position;
+    public Dimension dimensions;
 
-    public Rectangle() {
-        this.origin = new Point(0, 0);
-        this.width = 0;
-        this.height = 0;
+    public Rectangle(Point position, Dimension dimensions) {
+        this.position = position;
+        this.dimensions = dimensions;
     }
 
     public boolean contains(Point point) {
-        return point.x >= origin.x &&
-                point.x <= origin.x + width &&
-                point.y >= origin.y &&
-                point.y <= origin.y + height;
+        return point.x >= position.x &&
+                point.x <= position.x + dimensions.width &&
+                point.y >= position.y &&
+                point.y <= position.y + dimensions.height;
     }
 }

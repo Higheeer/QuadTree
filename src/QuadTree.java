@@ -20,21 +20,27 @@ public class QuadTree {
         this.dimensions = dimensions;
         this.origin = origin;
 
-        boundaries = new Rectangle();
-        boundaries.origin.x = origin.x - dimensions.width / 2;
-        boundaries.origin.y = origin.y - dimensions.height / 2;
-        boundaries.width = dimensions.width;
-        boundaries.height = dimensions.height;
+        boundaries = new Rectangle(new Point(0, 0), new Dimension(500, 500));
     }
 
     public void insert(Point point) {
         if (boundaries.contains(point)) {
-
+            if (isDivided) {
+                insertToKid(point);
+            } else {
+                if (exceededCapacity()) {
+                    divide();
+                    relocatePoints();
+                    insertToKid(point);
+                } else {
+                    insertToParent(point);
+                }
+            }
         }
     }
 
     private void insertToParent(Point point) {
-
+        points.add(point);
     }
 
     private void insertToKid(Point point) {
@@ -48,29 +54,25 @@ public class QuadTree {
     }
 
     private void divide() {
-        kids[0] = new QuadTree(new Point(origin.x / 2, origin.y / 2), new Dimension(dimensions.width / 2, dimensions.height / 2));
-        kids[1] = new QuadTree(new Point(origin.x / 2, origin.y + origin.y / 2), new Dimension(dimensions.width / 2, dimensions.height / 2));
-        kids[2] = new QuadTree(new Point(origin.x + (origin.x / 2), origin.y + origin.y / 2), new Dimension(dimensions.width / 2, dimensions.height / 2));
-        kids[3] = new QuadTree(new Point(origin.x + (origin.x / 2), origin.y / 2), new Dimension(dimensions.width / 2, dimensions.height / 2));
+        kids[0] = new QuadTree(new Point(origin.x - dimensions.width / 4, origin.y - dimensions.height / 4), new Dimension(dimensions.width / 2, dimensions.height / 2));
+        kids[1] = new QuadTree(new Point(origin.x - dimensions.width / 4, origin.y + dimensions.height / 4), new Dimension(dimensions.width / 2, dimensions.height / 2));
+        kids[2] = new QuadTree(new Point(origin.x + dimensions.width / 4, origin.y + dimensions.height / 4), new Dimension(dimensions.width / 2, dimensions.height / 2));
+        kids[3] = new QuadTree(new Point(origin.x + dimensions.width / 4, origin.y - dimensions.height / 4), new Dimension(dimensions.width / 2, dimensions.height / 2));
 
         isDivided = true;
     }
 
     private void relocatePoints() {
-        if (isDivided) {
-            for (Point x : points) {
-                for (QuadTree y : kids) {
-                    y.insert(x);
+            for (Point point : points) {
+                for (QuadTree kid : kids) {
+                    kid.insert(point);
                 }
             }
             points.clear();
             points.setSize(0);
-        }
     }
 
     public void display() {
-        System.out.println("Parent Origin: " + origin.x + ' ' + origin.y + ' ' + points);
-
         if (isDivided) {
             for (QuadTree i : kids) {
                 i.display();
