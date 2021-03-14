@@ -1,8 +1,6 @@
-import javax.swing.*;
-import java.awt.*;
 import java.util.LinkedHashSet;
 
-public class QuadTree extends JPanel {
+public class QuadTree {
     private final int capacity;
     private final LinkedHashSet<Point> points;
 
@@ -72,22 +70,5 @@ public class QuadTree extends JPanel {
             }
         }
         points.clear();
-    }
-
-    public void paint(Graphics graphic) {
-        for (Point point : points) {
-            graphic.drawRect((int) point.x, (int) point.y, 1, 1);
-        }
-
-        if (isDivided) {
-            graphic.setColor(Color.BLACK);
-            graphic.drawLine((int) (origin.x - dimensions.width / 2), (int) origin.y, (int) (origin.x + dimensions.width / 2), (int) origin.y);
-            graphic.drawLine((int) origin.x, (int) (origin.y - dimensions.height / 2), (int) origin.x, (int) (origin.y + dimensions.height / 2));
-
-            for (QuadTree kid : kids) {
-                graphic.setColor(Color.RED);
-                kid.paint(graphic);
-            }
-        }
     }
 }
