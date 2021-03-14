@@ -1,8 +1,10 @@
-import java.util.Vector;
+import javax.swing.*;
+import java.awt.*;
+import java.util.LinkedHashSet;
 
-public class QuadTree {
+public class QuadTree extends JPanel {
     private final int capacity;
-    private final Vector<Point> points;
+    private final LinkedHashSet<Point> points;
 
     private final Point origin;
     private final Dimension dimensions;
@@ -15,8 +17,8 @@ public class QuadTree {
         kids = new QuadTree[4];
         isDivided = false;
 
-        capacity = 10;
-        points = new Vector<>();
+        capacity = 5;
+        points = new LinkedHashSet<>();
 
         this.dimensions = dimensions;
         this.origin = origin;
@@ -70,14 +72,21 @@ public class QuadTree {
             }
         }
         points.clear();
-        points.setSize(0);
     }
 
-    public void display() {
-        System.out.println(points);
+    public void paint(Graphics graphic) {
+        for (Point point : points) {
+            graphic.drawRect((int) point.x, (int) point.y, 1, 1);
+        }
+
         if (isDivided) {
-            for (QuadTree i : kids) {
-                i.display();
+            graphic.setColor(Color.BLACK);
+            graphic.drawLine((int) (origin.x - dimensions.width / 2), (int) origin.y, (int) (origin.x + dimensions.width / 2), (int) origin.y);
+            graphic.drawLine((int) origin.x, (int) (origin.y - dimensions.height / 2), (int) origin.x, (int) (origin.y + dimensions.height / 2));
+
+            for (QuadTree kid : kids) {
+                graphic.setColor(Color.RED);
+                kid.paint(graphic);
             }
         }
     }

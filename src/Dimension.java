@@ -1,8 +1,8 @@
 public class Dimension {
-    public int width;
-    public int height;
+    public double width;
+    public double height;
 
-    public Dimension(int width, int height) {
+    public Dimension(double width, double height) {
         this.width = width;
         this.height = height;
     }

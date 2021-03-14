@@ -1,10 +1,21 @@
-public class Main{
-    public static void main(String[] args) {
-        QuadTree quadTree = new QuadTree(new Point(250, 250), new Dimension(500, 500));
+import javax.swing.*;
 
-        for (int i = 0; i < 31; i++) {
-            quadTree.insert(new Point((int) (Math.random() * 500), (int) (Math.random() * 500)));
+public class Main extends JFrame {
+    public Main() {
+        setTitle("QuadTree");
+        setSize(1075, 1075);
+        setDefaultCloseOperation(EXIT_ON_CLOSE);
+    }
+
+    public static void main(String[] args) {
+        Main mainFrame = new Main();
+
+        QuadTree quadTree = new QuadTree(new Point(525, 525), new Dimension(1000, 1000));
+        for (int i = 0; i < 8000; i++) {
+            quadTree.insert(new Point((Math.random() * 1000) + 25, (Math.random() * 1000) + 25));
         }
-        quadTree.display();
+
+        mainFrame.add(quadTree);
+        mainFrame.setVisible(true);
     }
 }
