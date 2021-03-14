@@ -2,16 +2,17 @@ import java.util.Vector;
 
 public class QuadTree {
     private final int capacity;
+    private final Vector<Point> points;
+
     private final Point origin;
     private final Dimension dimensions;
     private final Rectangle boundaries;
-    private final Vector<Point> points;
+
     public QuadTree[] kids;
     private boolean isDivided;
 
     public QuadTree(Point origin, Dimension dimensions) {
         kids = new QuadTree[4];
-
         isDivided = false;
 
         capacity = 10;
@@ -20,7 +21,7 @@ public class QuadTree {
         this.dimensions = dimensions;
         this.origin = origin;
 
-        boundaries = new Rectangle(new Point(0, 0), new Dimension(500, 500));
+        boundaries = new Rectangle(new Point(origin.x - dimensions.width / 2, origin.y - dimensions.height / 2), new Dimension(dimensions.width, dimensions.height));
     }
 
     public void insert(Point point) {
@@ -63,16 +64,17 @@ public class QuadTree {
     }
 
     private void relocatePoints() {
-            for (Point point : points) {
-                for (QuadTree kid : kids) {
-                    kid.insert(point);
-                }
+        for (Point point : points) {
+            for (QuadTree kid : kids) {
+                kid.insert(point);
             }
-            points.clear();
-            points.setSize(0);
+        }
+        points.clear();
+        points.setSize(0);
     }
 
     public void display() {
+        System.out.println(points);
         if (isDivided) {
             for (QuadTree i : kids) {
                 i.display();
