@@ -3,22 +3,22 @@ import java.util.Vector;
 public class QuadTree
 {
     private final static int capacity = 10;
-    private final Vector<Point> points;
+    private Vector<Point> points;
     private final QuadTree[] kids;
 
     private final Point origin;
     private final Dimension dimension;
     private final Boundaries boundaries;
 
-    private final int divideLevel;
+    private final int divideDepth;
     private boolean isDivided;
     private final static int maxDepth = 5;
 
-    public QuadTree(int divideLevel, Point origin, Dimension dimension)
+    public QuadTree(int divideDepth, Point origin, Dimension dimension)
     {
         this.kids = new QuadTree[4];
         this.isDivided = false;
-        this.divideLevel = divideLevel;
+        this.divideDepth = divideDepth;
 
         this.points = new Vector<>();
 
@@ -53,6 +53,44 @@ public class QuadTree
         }
     }
 
+    public boolean contains(Point point)
+    {
+        if (!boundaries.contains(point))
+        {
+            return false;
+        }
+
+        if (isDivided)
+        {
+            return kidsContain(point);
+        }
+        else
+        {
+            for (Point existingPoint : points)
+            {
+                if (existingPoint.equals(point))
+                {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    private boolean kidsContain(Point point)
+    {
+        for (QuadTree kid : kids)
+        {
+            if (kid.contains(point))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     private void insertToParent(Point point)
     {
         points.add(point);
@@ -68,15 +106,15 @@ public class QuadTree
 
     private boolean shouldBeDivided()
     {
-        return points.size() >= capacity && divideLevel <= maxDepth;
+        return points.size() >= capacity && divideDepth <= maxDepth;
     }
 
     private void divide()
     {
-        kids[0] = new QuadTree(divideLevel + 1, new Point(origin.x - dimension.width / 4, origin.y - dimension.height / 4), new Dimension(dimension.width / 2, dimension.height / 2));
-        kids[1] = new QuadTree(divideLevel + 1, new Point(origin.x - dimension.width / 4, origin.y + dimension.height / 4), new Dimension(dimension.width / 2, dimension.height / 2));
-        kids[2] = new QuadTree(divideLevel + 1, new Point(origin.x + dimension.width / 4, origin.y + dimension.height / 4), new Dimension(dimension.width / 2, dimension.height / 2));
-        kids[3] = new QuadTree(divideLevel + 1, new Point(origin.x + dimension.width / 4, origin.y - dimension.height / 4), new Dimension(dimension.width / 2, dimension.height / 2));
+        kids[0] = new QuadTree(divideDepth + 1, new Point(origin.x - dimension.width / 4, origin.y - dimension.height / 4), new Dimension(dimension.width / 2, dimension.height / 2));
+        kids[1] = new QuadTree(divideDepth + 1, new Point(origin.x - dimension.width / 4, origin.y + dimension.height / 4), new Dimension(dimension.width / 2, dimension.height / 2));
+        kids[2] = new QuadTree(divideDepth + 1, new Point(origin.x + dimension.width / 4, origin.y + dimension.height / 4), new Dimension(dimension.width / 2, dimension.height / 2));
+        kids[3] = new QuadTree(divideDepth + 1, new Point(origin.x + dimension.width / 4, origin.y - dimension.height / 4), new Dimension(dimension.width / 2, dimension.height / 2));
 
         isDivided = true;
     }
@@ -91,5 +129,8 @@ public class QuadTree
             }
         }
         points.clear();
+        points = null;
     }
+
+
 }
