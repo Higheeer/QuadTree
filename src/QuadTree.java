@@ -66,12 +66,17 @@ public class QuadTree
         }
         else
         {
-            for (Point existingPoint : points)
+            return parentContains(point);
+        }
+    }
+
+    private boolean parentContains(Point point)
+    {
+        for (Point existingPoint : points)
+        {
+            if (existingPoint.equals(point))
             {
-                if (existingPoint.equals(point))
-                {
-                    return true;
-                }
+                return true;
             }
         }
 
